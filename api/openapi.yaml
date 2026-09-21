@@ -806,87 +806,14 @@ components:
           description: URI to access the api/users/authenticator endpoint
           format: uri
     User:
-      description: schema for User data structures
-      type: object
-      additionalProperties: false
-      properties:
-        "$schema":
-          type: string
-          description: path to the JSON Schema to use for the validation of the JSON
-            data structure describing the user
-        id:
-          type: integer
-          description: unique identifier for the user
-        email:
-          type: string
-          format: email
-          description: user email
-        name:
-          type: string
-          description: username
-        password:
-          type: string
-          minLength: 6
-          maxLength: 20
-          description: user password
-        self:
-          type: string
-          format: uri
-      required:
-      - email
+      $ref: ../json-schemas/user_schema.json
     Users:
       description: schema for Users data structures
       type: array
       items:
         "$ref": "#/components/schemas/User"
     Film:
-      description: schema for Film data structures
-      type: object
-      additionalProperties: false
-      properties:
-        "$schema":
-          type: string
-          description: path to the JSON Schema to use for the validation of the JSON
-            data structure describing the film
-        id:
-          type: integer
-          description: unique identifier for the film data structure
-        title:
-          type: string
-          description: textual title of the film
-        owner:
-          type: integer
-          description: unique identifier of the the film data structure owner
-        private:
-          type: boolean
-          description: true if only the owner of the film data structure can access
-            it, false otherwise
-          default: 'true'
-        watchDate:
-          type: string
-          format: date
-          description: the date when the film was watched by the owner
-        rating:
-          type: integer
-          description: the rating the owner has given to the film
-          minimum: 1
-          maximum: 10
-        favorite:
-          type: boolean
-          description: 'true if the film is among the favourite ones of the owner,
-            false otherwise '
-          default: 'false'
-        self:
-          type: string
-          format: uri
-        reviews:
-          type: string
-          format: uri
-          description: the reviews for the film
-      required:
-      - title
-      - owner
-      - private
+      $ref: ../json-schemas/film_schema.json
     Films:
       description: schema for Films data structures
       type: object
@@ -919,45 +846,7 @@ components:
       required:
       - totalPages
     Review:
-      description: schema for Review data structures
-      type: object
-      additionalProperties: false
-      properties:
-        "$schema":
-          type: string
-          description: path to the JSON Schema to use for the validation of the JSON
-            data structure describing the film
-        filmId:
-          type: integer
-          description: unique identifier of the film for which a review invitation
-            has been issued
-        reviewerId:
-          type: integer
-          description: unique identifier of the user who has received the review invitation
-        completed:
-          type: boolean
-          description: true if the review has been completed, false otherwise
-          default: 'false'
-        reviewDate:
-          type: string
-          format: date
-          description: the date when the review has been completed by the invited
-            user
-        rating:
-          type: integer
-          description: the rating the reviewer has given to the film
-          minimum: 1
-          maximum: 10
-        review:
-          type: string
-          description: a textual description of the review
-          maxLength: 1000
-        self:
-          type: string
-          format: uri
-      required:
-      - filmId
-      - reviewerId
+      $ref: ../json-schemas/review_schema.json
     Reviews:
       description: schema for Reviews data structures
       type: object
