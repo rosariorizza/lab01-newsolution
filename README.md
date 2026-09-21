@@ -1,75 +1,130 @@
+
 # Film Manager Service
 
 ## Overview
-This server was generated using the [swagger-codegen](https://github.com/swagger-api/swagger-codegen) project.
-The project uses an OpenAPI specification (openapi.yaml or openapi.json) as a blueprint to generate the server stub.
 
+This project implements the REST APIs for the interaction with the Film Manager service.
+
+The project uses an OpenAPI specification (`api/openapi.yaml`) as the blueprint for the REST interface. OpenAPI Generator is used to automatically generate the routing layer that connects the API operations to the application controllers.
+
+## Requirements
+
+The following software is required:
+
+- Node.js 22
+- npm
+- Java
+
+On the LabInf machines, use `nvm` to install and select the required Node.js version:
+
+```bash
+nvm install 22
+```
+
+Then install the project dependencies:
+
+```bash
+npm ci
+```
 
 ## Generating the Server Stub
 
-You can generate the Node.js server stub from their OpenAPI specification using either of the following methods:
+The server routing layer is generated directly from the OpenAPI specification using [OpenAPI Generator](https://openapi-generator.tech/).
 
-### Using Swagger Editor (recommended)
+Run:
 
-- Download the project [repository](https://github.com/swagger-api/swagger-editor/archive/refs/tags/v4.14.7.zip) and unzip it.
-
-- Open index.html (double-click) to lounch Swagger Editor in your browser.
-
-- Paste your OpenAPI document (openapi.yaml or openapi.json).
-
-- Generate Server → nodejs-server → Download.
-
-### Using Swagger Codegen CLI (Java required)
-
-- Download the Swagger Codegen CLI jar [here](https://repo1.maven.org/maven2/io/swagger/codegen/v3/swagger-codegen-cli/3.0.72/swagger-codegen-cli-3.0.72.jar).
-
-- Run the following command:
-
-```
-java -jar swagger-codegen-cli-3.0.72.jar generate -i openapi.json -l nodejs-server -o output-folder/
+```bash
+npm run generate
 ```
 
-## Note
+The generated files are placed in the `generated/` folder.
 
-When extracting the compressed archive containing the generated server stub, the default Windows decompression tool may display security warnings and block the operation. To avoid these issues, consider using alternative archiving tools such as WinRar or 7-Zip. Alternatively, generating the stub directly using the Swagger Codegen CLI jar does not typically cause these problems.
+The `generated/` folder must not be edited manually, since its contents are recreated every time the generation command is executed.
+
+Whenever `api/openapi.yaml` is modified, run again:
+
+```bash
+npm run generate
+```
 
 ## Integration
 
-Once you have generated the server stub, integrate this repository into it:
+The main parts to complete are:
 
-Copy all files and folders from this repo into the generated server stub and replace duplicates in the stub with the ones from this repo (`package.json`, `index.js`, `utils/` folder, `service/` folder).
+1. `api/openapi.json` – define the REST API, including paths, operations, parameters, responses, and authentication requirements.
+2. `json-schemas/` – define the JSON Schemas used by the API. These schemas can be referenced from the OpenAPI document using `$ref`.
+3. `components/` – replace all occurrences of the placeholder `/change/me` with the correct API URLs.
+4. `controllers/` – implement the controller logic and connect each operation to the provided services.
 
-After integrating this repository into the generated server stub, you should complete the remaining parts of the implementation:
+The business logic is already provided in the `service/` folder.
 
-1) `index.js` – implement the API routes and set up the JSON validator according to the instructions in the TODO comments.
+Request validation and API routing are automatically handled according to the OpenAPI specification.
 
-2) `components/` – replace all occurrences of the placeholder "/change/me" with the correct API URLs.
+### Controller Mapping
 
-3) `controllers/` – implement your controller logic and connect it to the routes in index.js.
+The generated routing layer uses the first OpenAPI `tag` and the `operationId` of each operation to determine which controller must handle the request.
 
+For example:
+
+```yaml
+tags:
+  - ApiFilmsPublic
+operationId: getPublicFilms
+```
+
+corresponds to the controller file:
+
+```text
+controllers/ApiFilmsPublic.js
+```
+
+which must export:
+
+```js
+module.exports.getPublicFilms = ...
+```
+
+Therefore:
+
+```text
+first tag    -> controller file name
+operationId  -> exported function name
+```
+
+Operations sharing the same first tag are handled by the same controller file.
+
+The generated files inside `generated/` may use different internal names and must not be edited manually.
 
 ## Running the Server
 
-Install dependencies and start the server:
+After generating the routing layer, start the server with:
 
-```
-npm install
+```bash
 npm start
 ```
-Open Swagger UI to view the API documentation:
-http://localhost:3001/docs
 
+The server is available at:
+
+```text
+http://localhost:3001
+```
+
+Swagger UI can be used to inspect and test the API at:
+
+```text
+http://localhost:3001/docs
+```
 
 ## Testing the App
 
 Use the following credentials for testing:
 
-Username: user.dsp@polito.it
+Username: `user.dsp@polito.it`
 
-Password: password
+Password: `password`
 
-In the database folder you can find a [list](/database/passwords_databases.txt) of the users with relative password.
+In the `database` folder you can find a [list](/database/passwords_databases.txt) of the users with their relative passwords.
 
 ## Pagination
 
-To set the number of items per page in API pagination, modify the ELEMENTS_IN_PAGE variable in utils/constants.js.
+To set the number of items per page in API pagination, modify the `ELEMENTS_IN_PAGE` variable in `utils/constants.js`.
