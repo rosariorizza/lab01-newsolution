@@ -11,7 +11,8 @@ class Review{
         if(review)
             this.review = review;
         
-        this.self =  "/change/me";
+        var selfLink = "/api/films/public/" + this.filmId + "/reviews/" + this.reviewerId;
+        this.self =  selfLink;
     }
 }
 

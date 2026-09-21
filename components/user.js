@@ -9,7 +9,8 @@ class User{
         if(hash)
             this.hash = hash;
 
-        this.self =  "/change/me";
+        var selfLink = "/api/users/" + this.id;
+        this.self =  selfLink;
     }
 }
 

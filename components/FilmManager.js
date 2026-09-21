@@ -1,12 +1,12 @@
 class FilmManager{    
     constructor() {
-        this.films = "/change/me";
-        this.privateFilms = "/change/me";
-        this.publicFilms = "/change/me";
-        this.invitedPublicFilms = "/change/me";
-        this.reviewAssignments = "/change/me";
-        this.users = "/change/me";
-        this.usersAuthenticator = "/change/me";
+        this.films = "/api/films/";
+        this.privateFilms = "/api/films/private/";
+        this.publicFilms = "/api/films/public/";
+        this.invitedPublicFilms = "/api/films/public/invited";
+        this.reviewAssignments = "/api/films/public/assignments";
+        this.users = "/api/users/";
+        this.usersAuthenticator = "/api/users/authenticator";
     }
 }
 

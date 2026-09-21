@@ -8,7 +8,9 @@ const passport = require('passport');
 const session = require('express-session');
 const OpenApiValidator = require('express-openapi-validator');
 const cookieParser = require('cookie-parser');
-
+const fs = require('fs');
+const yaml = require('js-yaml');
+const swaggerUi = require('swagger-ui-express');
 require('./passport-config');
 
 const serverPort = 3001;
@@ -29,6 +31,20 @@ app.use(session({
 }));
 
 app.use(passport.authenticate('session'));
+
+// Swagger UI setup
+const generatedOpenApiPath =
+  path.join(__dirname, 'generated/api/openapi.yaml');
+
+const openApiDocument = yaml.load(
+  fs.readFileSync(generatedOpenApiPath, 'utf8')
+);
+
+app.use(
+  '/docs',
+  swaggerUi.serve,
+  swaggerUi.setup(openApiDocument)
+);
 
 app.use(
   OpenApiValidator.middleware({

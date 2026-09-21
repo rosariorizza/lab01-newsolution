@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "generate": "rimraf generated && openapi-generator-cli generate -i api/openapi.yaml -g nodejs-express-server -t openapi-templates -o generated --global-property apis,supportingFiles=openapi.yaml,apiTests=false,apiDocs=false && rimraf generated/services generated/utils generated/.openapi-generator",
-    "prestart": "npm install",
     "start": "node index.js"
   },
   "keywords": [
@@ -14,21 +13,17 @@
   "license": "Unlicense",
   "private": true,
   "dependencies": {
-    "ajv-formats": "^2.1.1",
     "bcrypt": "^5.0.1",
-    "connect": "^3.2.0",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
-    "express-json-validator-middleware": "^3.0.1",
+    "express": "^4.22.3",
     "express-openapi-validator": "^4.13.8",
     "express-session": "^1.17.3",
-    "fs": "0.0.1-security",
     "js-yaml": "^3.3.0",
-    "oas3-tools": "2.0.2",
     "passport": "^0.6.0",
     "passport-local": "^1.0.0",
-    "path": "^0.12.7",
-    "sqlite3": "^5.0.11"
+    "sqlite3": "^5.0.11",
+    "swagger-ui-express": "^5.0.1"
   },
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.25.2",

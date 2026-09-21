@@ -14,36 +14,36 @@ externalDocs:
 servers:
 - url: http://localhost:3001/
 tags:
-- name: api
+- name: Api
   description: entry point of the REST interface
-- name: api/films
+- name: ApiFilms
   description: the set of all the films
-- name: api/films/private
+- name: ApiFilmsPrivate
   description: the set of all the private films
-- name: api/films/private/{filmId}
+- name: ApiFilmsPrivateFilmId
   description: the private film with ID filmId
-- name: api/films/public
+- name: ApiFilmsPublic
   description: the set of all the public films
-- name: api/films/public/invited
+- name: ApiFilmsPublicInvited
   description: the set of the public films for which a review invitation has been
     issued
-- name: api/films/public/{filmId}
+- name: ApiFilmsPublicFilmId
   description: the public film with ID filmId
-- name: api/films/public/{filmId}/reviews
+- name: ApiFilmsPublicFilmIdReviews
   description: the review invitations (reviews) issued for the public film with ID
     filmId
-- name: api/films/public/{filmId}/reviews/{reviewerId}
+- name: ApiFilmsPublicFilmIdReviewsReviewerId
   description: the review issued to the user with ID reviewerId for the public film
     with ID filmId
-- name: api/films/public/assignments
+- name: ApiFilmsPublicAssignments
   description: the assignments of review invitations to users
-- name: api/users
+- name: ApiUsers
   description: the set of all the users
-- name: api/users/authenticator
+- name: ApiUsersAuthenticator
   description: the authenticator
-- name: api/users/authenticator/current
+- name: ApiUsersAuthenticatorCurrent
   description: the authenticator current session
-- name: api/users/{userId}
+- name: ApiUsersUserId
   description: the user with ID userId
 paths:
   "/api":

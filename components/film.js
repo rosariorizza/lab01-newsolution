@@ -14,7 +14,10 @@ class Film{
         if(favorite)
             this.favorite = favorite;
     
-        this.self =  "/change/me"
+        this.self =  (privateFilm? "/api/films/private/" + this.id : "/api/films/public/" + this.id);
+
+        if(this.private == false)
+            this.reviews = "/api/films/public/" + this.id + "/reviews";
     }
 }
 
