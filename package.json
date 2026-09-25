@@ -4,7 +4,7 @@
   "description": "REST APIs for the interaction with the Film Manager service.",
   "main": "index.js",
   "scripts": {
-    "generate": "rimraf generated && openapi-generator-cli generate -i api/openapi.yaml -g nodejs-express-server -t openapi-templates -o generated --global-property apis,supportingFiles=openapi.yaml,apiTests=false,apiDocs=false && rimraf generated/services generated/utils generated/.openapi-generator",
+    "generate": "rimraf generated && openapi-generator-cli generate -i api/openapi.json -g nodejs-express-server -t openapi-templates -o generated --global-property apis,supportingFiles=openapi.yaml,apiTests=false,apiDocs=false && rimraf generated/services generated/utils generated/.openapi-generator",
     "start": "node index.js"
   },
   "keywords": [

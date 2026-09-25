@@ -78,5 +78,5 @@ app.use((err, req, res, next) => {
 });
 
 http.createServer(app).listen(serverPort, () => {
-  console.log(`Server listening on http://localhost:${serverPort}`);
+  console.log(`Server listening on http://localhost:${serverPort}\nSwagger UI available at http://localhost:${serverPort}/docs`);
 });
