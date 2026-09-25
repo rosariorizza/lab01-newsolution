@@ -1,9 +1,19 @@
 'use strict';
 
+const { validateFilm } = require('./validator');
+
 var utils = require('../utils/writer.js');
 const filmService = require('../service/FilmsService.js');
 
 module.exports.createFilm = function createFilm(req, res, next) {
+  if (!validateFilm(req.body)) {
+    return utils.writeJson(
+      res,
+      { errors: validateFilm.errors },
+      400
+    );
+  }
+
   var film = req.body;
   var owner = req.user.id;
   filmService.createFilm(film, owner)

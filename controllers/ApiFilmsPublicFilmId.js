@@ -1,5 +1,7 @@
 'use strict';
 
+const { validateFilm } = require('./validator');
+
 var utils = require('../utils/writer.js');
 const filmService = require('../service/FilmsService.js');
 
@@ -38,6 +40,14 @@ module.exports.getSinglePublicFilm = function getSinglePublicFilm(req, res, next
 };
 
 module.exports.updateSinglePublicFilm = function updateSinglePublicFilm(req, res, next) {
+  if (!validateFilm(req.body)) {
+    return utils.writeJson(
+      res,
+      { errors: validateFilm.errors },
+      400
+    );
+  }
+
   if(req.body.private == true){
     utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'Cannot change visibility'}], }, 409);
   }

@@ -52,7 +52,7 @@ app.use(
 
     operationHandlers: path.join(__dirname, 'generated'),
 
-    validateRequests: true,
+    validateRequests: false,
 
     validateSecurity: {
       handlers: {
