@@ -3,6 +3,7 @@
 var utils = require('../utils/writer.js');
 const filmService = require('../service/FilmsService.js');
 const constants = require('../utils/constants.js');
+const link = require('./link');
 
 module.exports.getPublicFilms = function getPublicFilms(req, res, next) {
   var numOfFilms = 0;
@@ -32,14 +33,14 @@ module.exports.getPublicFilms = function getPublicFilms(req, res, next) {
               totalPages: totalPage,
               currentPage: pageNo,
               totalItems: numOfFilms,
-              films: response
+              films: link.addToFilm(response)
             });
           } else {
             utils.writeJson(res, {
               totalPages: totalPage,
               currentPage: pageNo,
               totalItems: numOfFilms,
-              films: response,
+              films: link.addToFilm(response),
               next: "/api/films/public?pageNo=" + next
             });
           }

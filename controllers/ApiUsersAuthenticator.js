@@ -2,11 +2,12 @@
 
 var utils = require('../utils/writer.js');
 const userService = require('../service/UsersService.js');
+const link = require('./link');
 
 module.exports.authenticateUser = function authenticateUser (req, res, next) {
   userService.authenticateUser(req, res, next)
     .then(function (response) {
-      utils.writeJson(res, response, 200);
+      utils.writeJson(res, link.addToUser(response), 200);
     })
     .catch(function (err) {
       if(err === 'NO_USER') {

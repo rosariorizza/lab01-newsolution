@@ -1,6 +1,7 @@
 'use strict';
 
 const { validateFilm } = require('./validator');
+const link = require('./link');
 
 var utils = require('../utils/writer.js');
 const filmService = require('../service/FilmsService.js');
@@ -27,7 +28,7 @@ module.exports.deleteSinglePublicFilm = function deleteSinglePublicFilm(req, res
 module.exports.getSinglePublicFilm = function getSinglePublicFilm(req, res, next) {
   filmService.getSinglePublicFilm(req.params.filmId)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, link.addToFilm(response));
     })
     .catch(function (response) {
       if (response == "NO_FILMS" || response == "NO_PUBLIC_FILM") {

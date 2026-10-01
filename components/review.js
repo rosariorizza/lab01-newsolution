@@ -10,12 +10,8 @@ class Review{
             this.rating = rating;
         if(review)
             this.review = review;
-        
-        var selfLink = "/api/films/public/" + this.filmId + "/reviews/" + this.reviewerId;
-        this.self =  selfLink;
     }
 }
 
 module.exports = Review;
-
 

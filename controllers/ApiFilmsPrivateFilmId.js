@@ -1,6 +1,7 @@
 'use strict';
 
 const { validateFilm } = require('./validator');
+const link = require('./link');
 
 var utils = require('../utils/writer.js');
 const filmService = require('../service/FilmsService.js');
@@ -26,7 +27,7 @@ module.exports.deleteSinglePrivateFilm = function deleteSinglePrivateFilm(req, r
 module.exports.getSinglePrivateFilm = function getSinglePrivateFilm(req, res, next) {
   filmService.getSinglePrivateFilm(req.params.filmId, req.user.id)
     .then(function (response) {
-      utils.writeJson(res, response);
+      utils.writeJson(res, link.addToFilm(response));
     })
     .catch(function (response) {
       if (response == "USER_NOT_OWNER") {

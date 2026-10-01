@@ -3,6 +3,7 @@
 var utils = require('../utils/writer.js');
 const reviewService = require('../service/ReviewsService.js');
 const constants = require('../utils/constants.js');
+const link = require('./link');
 
 module.exports.getFilmReviews = function getFilmReviews(req, res, next) {
 
@@ -35,14 +36,14 @@ module.exports.getFilmReviews = function getFilmReviews(req, res, next) {
               totalPages: totalPage,
               currentPage: pageNo,
               totalItems: numOfReviews,
-              reviews: response
+              reviews: link.addToReview(response)
             });
           } else {
             utils.writeJson(res, {
               totalPages: totalPage,
               currentPage: pageNo,
               totalItems: numOfReviews,
-              reviews: response,
+              reviews: link.addToReview(response),
               next: "/api/films/public/" + req.params.taskId + "?pageNo=" + next
             });
           }
@@ -76,7 +77,7 @@ module.exports.issueFilmReview = function issueFilmReview(req, res, next) {
   else {
     reviewService.issueFilmReview(req.body, req.user.id)
       .then(function (response) {
-        utils.writeJson(res, response, 201);
+        utils.writeJson(res, link.addToReview(response), 201);
       })
       .catch(function (response) {
         if (response == "USER_NOT_OWNER") {

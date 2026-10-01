@@ -9,8 +9,6 @@ class User{
         if(hash)
             this.hash = hash;
 
-        var selfLink = "/api/users/" + this.id;
-        this.self =  selfLink;
     }
 }
 

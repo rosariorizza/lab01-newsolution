@@ -2,6 +2,7 @@
 
 var utils = require('../utils/writer.js');
 const reviewService = require('../service/ReviewsService.js');
+const link = require('./link');
 
 module.exports.deleteSingleReview = function deleteSingleReview (req, res, next) {
 
@@ -29,7 +30,7 @@ module.exports.getSingleReview = function getSingleReview (req, res, next) {
 
     reviewService.getSingleReview(req.params.filmId, req.params.reviewerId)
         .then(function(response) {
-            utils.writeJson(res, response);
+            utils.writeJson(res, link.addToReview(response));
         })
         .catch(function(response) {
             if (response == "NO_REVIEWS"){
