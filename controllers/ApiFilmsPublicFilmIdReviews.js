@@ -1,5 +1,6 @@
 'use strict';
 
+const { validateReview } = require('./validator');
 var utils = require('../utils/writer.js');
 const reviewService = require('../service/ReviewsService.js');
 const constants = require('../utils/constants.js');
@@ -60,40 +61,56 @@ module.exports.getFilmReviews = function getFilmReviews(req, res, next) {
 
 
 module.exports.issueFilmReview = function issueFilmReview(req, res, next) {
-  if (!Array.isArray(req.body)) {
-    return utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': "The request body must be an array of review objects." }]}, 400);
+  if (!Array.isArray(req.body) || req.body.length === 0) {
+    return utils.writeJson(res, { errors: [{ 'param': 'body', 'msg': "The request body must be a non-empty array of review objects." }]}, 400);
   }
 
-  var differentFilm = false;
-  for (var i = 0; i < req.body.length; i++) {
-    if (req.params.filmId != req.body[i].filmId) {
-      differentFilm = true;
+  const validationErrors = [];
+  for (let i = 0; i < req.body.length; i++) {
+    if (!validateReview(req.body[i])) {
+      validationErrors.push({
+        index: i,
+        errors: validateReview.errors.map((error) => ({ ...error }))
+      });
     }
   }
-  if (differentFilm) {
-    utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The filmId field of the review object is different from the filmdId path parameter.' }], }, 409);
+
+  if (validationErrors.length !== 0) {
+    return utils.writeJson(res, { errors: validationErrors }, 400);
   }
-  else {
-    reviewService.issueFilmReview(req.body, req.user.id)
-      .then(function (response) {
-        utils.writeJson(res, response, 201);
-      })
-      .catch(function (response) {
-        if (response == "USER_NOT_OWNER") {
-          utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user is not the owner of the film' }], }, 403);
-        }
-        else if (response == "NO_FILMS" || response == "PRIVATE_FILM") {
-          utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The public film does not exist.' }], }, 404);
-        }
-        else if (response == "REVIEWER_ID_IS_NOT_USER") {
-          utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user with ID reviewerId does not exist.' }], }, 404);
-        }
-        else if (response == "EXISTING_REVIEW") {
-          utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The review already exist for this film and reviewer' }], }, 409);
-        }
-        else {
-          utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': response }], }, 500);
-        }
-      });
+
+  if (req.body.some((invitation) => invitation.completed !== false)) {
+    return utils.writeJson(res, { errors: [{ 'param': 'completed', 'msg': 'A new review invitation must have completed set to false.' }]}, 409);
   }
+
+  if (req.body.some((invitation) => Number(invitation.filmId) !== Number(req.params.filmId))) {
+    return utils.writeJson(res, { errors: [{ 'param': 'filmId', 'msg': 'The filmId field of each review must match the filmId path parameter.' }]}, 409);
+  }
+
+  const reviewerIds = req.body.map((invitation) => invitation.reviewerId);
+  if (new Set(reviewerIds).size !== reviewerIds.length) {
+    return utils.writeJson(res, { errors: [{ 'param': 'reviewerId', 'msg': 'Each reviewer may appear only once in an invitation request.' }]}, 409);
+  }
+
+  reviewService.issueFilmReview(req.body, req.user.id)
+    .then(function (response) {
+      utils.writeJson(res, response, 201);
+    })
+    .catch(function (response) {
+      if (response == "USER_NOT_OWNER") {
+        utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user is not the owner of the film' }], }, 403);
+      }
+      else if (response == "NO_FILMS" || response == "PRIVATE_FILM") {
+        utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The public film does not exist.' }], }, 404);
+      }
+      else if (response == "REVIEWER_ID_IS_NOT_USER") {
+        utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The user with ID reviewerId does not exist.' }], }, 404);
+      }
+      else if (response == "EXISTING_REVIEW") {
+        utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': 'The review already exist for this film and reviewer' }], }, 409);
+      }
+      else {
+        utils.writeJson(res, { errors: [{ 'param': 'Server', 'msg': response }], }, 500);
+      }
+    });
 };

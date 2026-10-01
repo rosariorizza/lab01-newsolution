@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "generate": "rimraf generated && openapi-generator-cli generate -i api/openapi.json -g nodejs-express-server -t openapi-templates -o generated --global-property apis,supportingFiles=openapi.yaml,apiTests=false,apiDocs=false && rimraf generated/services generated/utils generated/.openapi-generator",
-    "start": "node index.js"
+    "start": "node index.js",
+    "test": "node --test --test-concurrency=1 test/*.test.js"
   },
   "keywords": [
     "swagger"

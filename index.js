@@ -13,7 +13,7 @@ const yaml = require('js-yaml');
 const swaggerUi = require('swagger-ui-express');
 require('./passport-config');
 
-const serverPort = 3001;
+const serverPort = Number(process.env.PORT || 3001);
 const app = express();
 
 app.use(express.json());
@@ -77,6 +77,9 @@ app.use((err, req, res, next) => {
   });
 });
 
-http.createServer(app).listen(serverPort, () => {
-  console.log(`Server listening on http://localhost:${serverPort}\nSwagger UI available at http://localhost:${serverPort}/docs`);
+const server = http.createServer(app).listen(serverPort, () => {
+  const actualPort = server.address().port;
+  console.log(`Server listening on http://localhost:${actualPort}\nSwagger UI available at http://localhost:${actualPort}/docs`);
 });
+
+module.exports = { app, server };

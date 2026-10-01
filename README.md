@@ -117,7 +117,15 @@ http://localhost:3001/docs
 
 ## Testing the App
 
-Use the following credentials for testing:
+Run the requirements-based automated suite with:
+
+```bash
+npm test
+```
+
+It creates a temporary SQLite database and starts the API on an ephemeral port, so it never changes `database/databaseV1.db`. See `test/REQUIREMENTS.md` for requirements traceability.
+
+For manual testing, use these credentials:
 
 Username: `user.dsp@polito.it`
 
